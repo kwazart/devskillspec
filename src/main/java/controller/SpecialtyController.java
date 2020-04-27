@@ -1,10 +1,9 @@
-package java.com.kwazarart.app.controller;
+package controller;
 
 
-import java.com.kwazarart.app.inputoutput.InputByUser;
-import java.com.kwazarart.app.model.Specialty;
-import java.com.kwazarart.app.repository.SpecialtyRepository;
-
+import connectionUtil.InputByUser;
+import model.Specialty;
+import repository.SpecialtyRepository;
 import java.util.List;
 
 public class SpecialtyController implements Controller {

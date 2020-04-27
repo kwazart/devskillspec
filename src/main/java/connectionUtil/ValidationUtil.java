@@ -1,4 +1,4 @@
-package java.com.kwazarart.app.inputoutput;
+package connectionUtil;
 
 public class ValidationUtil {
     public static boolean isDigit (String s) {

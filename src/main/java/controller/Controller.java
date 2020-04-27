@@ -1,4 +1,4 @@
-package java.com.kwazarart.app.controller;
+package controller;
 
 import java.util.List;
 

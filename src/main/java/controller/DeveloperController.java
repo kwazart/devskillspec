@@ -1,9 +1,8 @@
-package java.com.kwazarart.app.controller;
+package controller;
 
-import java.com.kwazarart.app.inputoutput.InputByUser;
-import java.com.kwazarart.app.model.Developer;
-import java.com.kwazarart.app.repository.DeveloperRepository;
-
+import connectionUtil.InputByUser;
+import model.Developer;
+import repository.DeveloperRepository;
 import java.util.List;
 
 

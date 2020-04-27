@@ -1,4 +1,4 @@
-package java.com.kwazarart.app.model;
+package model;
 
 public enum Status {
     ACTIVE, DELETED;

@@ -1,12 +1,10 @@
-package java.com.kwazarart.app.repository;
+package repository;
 
 
-import java.com.kwazarart.app.inputoutput.InputByUser;
-import java.com.kwazarart.app.inputoutput.Connector;
-import java.com.kwazarart.app.model.JdbcProperties;
-import java.com.kwazarart.app.model.Skill;
-import java.com.kwazarart.app.model.Status;
-
+import connectionUtil.Connector;
+import connectionUtil.InputByUser;
+import model.Skill;
+import model.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -37,7 +35,7 @@ public class SkillRepository implements Repository<Skill> {
 
         Skill skill = null;
         String query = "SELECT * FROM "
-                + JdbcProperties.getTableSkills()
+                + getTABLE()
                 + " WHERE id = " + id + ";";
         List<List<String>> list = Connector.select(query);
         skill = new Skill(
@@ -52,7 +50,7 @@ public class SkillRepository implements Repository<Skill> {
     public List<Skill> getAll() {
         logging("getAll");
 
-        String query = "SELECT * FROM " + JdbcProperties.getTableSkills() + ";";
+        String query = "SELECT * FROM " + getTABLE() + ";";
         List<List<String>> list = Connector.select(query);
         List<Skill> listSkills = new ArrayList<Skill>();
         for (List<String> line : list) {

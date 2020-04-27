@@ -1,9 +1,7 @@
-package java.com.kwazarart.app.viewer;
+package viewer;
 
-import java.com.kwazarart.app.controller.SpecialtyController;
-import java.com.kwazarart.app.model.Specialty;
-
-
+import controller.SpecialtyController;
+import model.Specialty;
 import java.util.List;
 import java.util.Scanner;
 

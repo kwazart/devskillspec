@@ -1,8 +1,7 @@
-package java.com.kwazarart.app.viewer;
+package viewer;
 
-import java.com.kwazarart.app.controller.SkillController;
-import java.com.kwazarart.app.model.Skill;
-
+import controller.SkillController;
+import model.Skill;
 import java.util.List;
 import java.util.Scanner;
 

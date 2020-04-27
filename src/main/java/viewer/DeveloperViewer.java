@@ -1,8 +1,7 @@
-package java.com.kwazarart.app.viewer;
+package viewer;
 
-import java.com.kwazarart.app.controller.DeveloperController;
-import java.com.kwazarart.app.model.Developer;
-
+import controller.DeveloperController;
+import model.Developer;
 import java.util.List;
 import java.util.Scanner;
 

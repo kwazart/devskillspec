@@ -1,8 +1,7 @@
-package java.com.kwazarart.app.repository;
+package repository;
 
 import java.util.Date;
 import java.util.List;
-
 import java.util.logging.Logger;
 
 

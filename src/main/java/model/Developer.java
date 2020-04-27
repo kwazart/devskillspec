@@ -1,4 +1,4 @@
-package java.com.kwazarart.app.model;
+package model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

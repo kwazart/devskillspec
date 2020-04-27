@@ -1,30 +1,76 @@
-package java.com.kwazarart.app.inputoutput;
+package connectionUtil;
 
-import java.com.kwazarart.app.model.*;
-
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class Connector {
+
+    private static volatile Connector connector;
+    /*
+    // Singleton double checked
+    public static ConnectorUtil getConnectorUtil() {
+        ConnectorUtil localConnectorUtil = connectorUtil;
+        if (localConnectorUtil == null) {
+            synchronized (ConnectorUtil.class) {
+                localConnectorUtil = connectorUtil;
+                if (localConnectorUtil == null) {
+                    connectorUtil = localConnectorUtil = new ConnectorUtil();
+                }
+            }
+        }
+        return localConnectorUtil;
+    }
+    */
+    private static void setConnection(Connection connection) {
+        Connector.connection = connection;
+    }
+
+    private static Connection connection;
+
     public static int searchMaxIndex(String table) {
         String query = "SELECT * FROM " + table + ";";
         List<List<String>> list = select(query);
         return list.size();
     }
 
+    public static void startConnection() {
+        if (getConnection() == null) {
+            Properties properties = new Properties();
+            Connection connection = null;
+            try {
+                properties.load(new FileReader("src/main/resources/application.properties"));
+                connection = DriverManager.getConnection(
+                        properties.getProperty("db.host"),
+                        properties.getProperty("db.user"),
+                        properties.getProperty("db.password"));
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+            }
+            Connector.setConnection(connection);
+        }
+    }
+
+    public static void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static List<List<String>> select(String query) {
         List<List<String>> list = new ArrayList<List<String>>();
-        Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = DriverManager.getConnection(
-                    JdbcProperties.getURL(),
-                    JdbcProperties.getUSERNAME(),
-                    JdbcProperties.getPASSWORD());
 
-            statement =  connection.createStatement();
+            statement =  getConnection().createStatement();
             resultSet = statement.executeQuery(query);
 
 
@@ -59,13 +105,6 @@ public class Connector {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (statement != null) {
                 try {
                     statement.close();
@@ -85,26 +124,13 @@ public class Connector {
     }
 
     public static void addOrUpdate(String line) {
-        Connection connection = null;
         Statement statement = null;
         try {
-            connection = DriverManager.getConnection(
-                    JdbcProperties.getURL(),
-                    JdbcProperties.getUSERNAME(),
-                    JdbcProperties.getPASSWORD());
-
-            statement = connection.createStatement();
+            statement = getConnection().createStatement();
             statement.executeUpdate(line);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (statement != null) {
                 try {
                     statement.close();
@@ -113,5 +139,9 @@ public class Connector {
                 }
             }
         }
+    }
+
+    public static Connection getConnection() {
+        return Connector.connection;
     }
 }

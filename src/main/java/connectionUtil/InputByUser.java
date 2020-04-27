@@ -1,4 +1,4 @@
-package java.com.kwazarart.app.inputoutput;
+package connectionUtil;
 
 import java.util.Scanner;
 

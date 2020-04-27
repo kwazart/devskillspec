@@ -1,13 +1,13 @@
-package java.com.kwazarart.app.repository;
+package repository;
 
-import java.com.kwazarart.app.inputoutput.Connector;
-import java.com.kwazarart.app.inputoutput.InputByUser;
-import java.com.kwazarart.app.model.*;
-
+import connectionUtil.Connector;
+import connectionUtil.InputByUser;
+import model.*;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.FileHandler;
-
 import java.util.logging.SimpleFormatter;
 
 public class DeveloperRepository implements Repository<Developer> {
@@ -52,7 +52,7 @@ public class DeveloperRepository implements Repository<Developer> {
         logging("get");
         Developer developer = null;
         String query = "SELECT * FROM "
-                + JdbcProperties.getTableDevelopers()
+                + getTABLE()
                 + " WHERE id = " + id + ";";
         List<List<String>> list = Connector.select(query);
         String [] arraySkills = list.get(0).get(4).split(",");
@@ -74,7 +74,7 @@ public class DeveloperRepository implements Repository<Developer> {
     @Override
     public List<Developer> getAll() {
         logging("getAll");
-        String query = "SELECT * FROM " + JdbcProperties.getTableDevelopers() + " ;";
+        String query = "SELECT * FROM " + getTABLE() + " ;";
         List<List<String>> list = Connector.select(query);
         List<Developer> listDevelopers = new ArrayList<Developer>();
         String [] arraySkills = null;

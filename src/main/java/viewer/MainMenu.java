@@ -1,5 +1,6 @@
-package java.com.kwazarart.app.viewer;
+package viewer;
 
+import connectionUtil.Connector;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -19,12 +20,18 @@ public class MainMenu {
             System.out.println("\t0 - Exit");
             System.out.println("Select variant:");
             select = scanner.nextLine();
-            if (select.equals("0")) return;
+            if (select.equals("0")) {
+                Connector.closeConnection(Connector.getConnection());
+                return;
+            }
             if ("1".equals(select)) {
+                Connector.startConnection();
                 viewerDeveloper.viewInnerMenu();
             } else if ("2".equals(select)) {
+                Connector.startConnection();
                 viewerSkill.viewInnerMenu();
             } else if ("3".equals(select)) {
+                Connector.startConnection();
                 viewerSpecialty.viewInnerMenu();
             } else {
                 System.out.println("Wrong variant. Try again.\n\n");

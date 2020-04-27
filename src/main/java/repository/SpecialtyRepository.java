@@ -1,12 +1,10 @@
-package java.com.kwazarart.app.repository;
+package repository;
 
 
-import java.com.kwazarart.app.inputoutput.Connector;
-import java.com.kwazarart.app.inputoutput.InputByUser;
-import java.com.kwazarart.app.model.JdbcProperties;
-import java.com.kwazarart.app.model.Specialty;
-import java.com.kwazarart.app.model.Status;
-
+import connectionUtil.Connector;
+import connectionUtil.InputByUser;
+import model.Specialty;
+import model.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -35,7 +33,7 @@ public class SpecialtyRepository implements Repository<Specialty> {
     public Specialty get(int id) {
         logging("get");
         String query = "SELECT * FROM "
-                + JdbcProperties.getTableSpecialties()
+                + getTABLE()
                 + " WHERE id = " + id + ";";
         List<List<String>> list = Connector.select(query);
         Specialty specialty = new Specialty(
@@ -49,7 +47,7 @@ public class SpecialtyRepository implements Repository<Specialty> {
     @Override
     public List<Specialty> getAll() {
         logging("getAll");
-        String query = "SELECT * FROM " + JdbcProperties.getTableSpecialties() + " ;";
+        String query = "SELECT * FROM " + getTABLE() + " ;";
         List<List<String>> list = Connector.select(query);
         List<Specialty> listSpecialties = new ArrayList<Specialty>();
         for (List<String> line : list) {
