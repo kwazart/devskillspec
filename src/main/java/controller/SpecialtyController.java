@@ -6,12 +6,12 @@ import model.Specialty;
 import repository.SpecialtyRepository;
 import java.util.List;
 
-public class SpecialtyController implements Controller {
-    SpecialtyRepository specialtyRepository = new SpecialtyRepository();
+public class SpecialtyController implements Controller<Specialty> {
+    private SpecialtyRepository specialtyRepository = new SpecialtyRepository();
 
     @Override
-    public void create() {
-        specialtyRepository.createSpecialty();
+    public void create(Specialty specialty) {
+        specialtyRepository.createSpecialty(specialty);
     }
 
     @Override
@@ -27,12 +27,12 @@ public class SpecialtyController implements Controller {
     }
 
     @Override
-    public void update(int var) {
-        specialtyRepository.update(var);
+    public void update(Specialty specialty) {
+        specialtyRepository.update(specialty);
     }
 
     @Override
-    public void delete() {
-        specialtyRepository.delete();
+    public void delete(Specialty specialty) {
+        specialtyRepository.delete(specialty);
     }
 }

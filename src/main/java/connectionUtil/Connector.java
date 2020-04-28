@@ -9,22 +9,6 @@ import java.util.Properties;
 
 public class Connector {
 
-    private static volatile Connector connector;
-    /*
-    // Singleton double checked
-    public static ConnectorUtil getConnectorUtil() {
-        ConnectorUtil localConnectorUtil = connectorUtil;
-        if (localConnectorUtil == null) {
-            synchronized (ConnectorUtil.class) {
-                localConnectorUtil = connectorUtil;
-                if (localConnectorUtil == null) {
-                    connectorUtil = localConnectorUtil = new ConnectorUtil();
-                }
-            }
-        }
-        return localConnectorUtil;
-    }
-    */
     private static void setConnection(Connection connection) {
         Connector.connection = connection;
     }

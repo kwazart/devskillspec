@@ -2,19 +2,20 @@ package repository;
 
 
 import connectionUtil.Connector;
-import connectionUtil.InputByUser;
 import model.Skill;
 import model.Status;
+import repository.jdbc.JdbcRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 
-public class SkillRepository implements Repository<Skill> {
+public class SkillRepository implements Repository<Skill>, JdbcRepository {
     Logger log = Logger.getLogger(DeveloperRepository.class.getName());
     private static final String TABLE = "skills";
 
-    public static String getTABLE() {
+    private static String getTABLE() {
         return TABLE;
     }
 
@@ -61,44 +62,29 @@ public class SkillRepository implements Repository<Skill> {
 
 
     @Override
-    public void update(int variant) {
+    public void update(Skill skill) {
         logging("updater");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = null;
-        if (variant == 1) {
-            System.out.println("Updating procedure. New data.");
-            System.out.println("Enter new skill name: ");
-            query =" UPDATE " + getTABLE() + " SET skill_name = '" + InputByUser.inputData() + "' WHERE id = " + id + ";";
-        } else if (variant == 2) {
-            System.out.println("Updating procedure. New data.");
-            Skill skill = get(id);
-            if (skill.getStatus().equals(Status.ACTIVE)) {
-                query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
-            } else {
-                query = " UPDATE " + getTABLE() + " SET status = 'ACTIVE' WHERE id = " + id + ";";
-            }
-        }
+
+        String query =" UPDATE " + getTABLE()
+                + " SET skill_name = '" + skill.getName()
+                + "' WHERE id = " + skill.getId() + ";";
+
+        Connector.addOrUpdate(query);
+        query =" UPDATE " + getTABLE()
+                + " SET status = '" + skill.getStatus().toString()
+                + "' WHERE id = " + skill.getId() + ";";
         Connector.addOrUpdate(query);
     }
 
     @Override
-    public void delete() {
+    public void delete(Skill skill) {
         logging("delete");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
+        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + skill.getId() + ";";
         Connector.addOrUpdate(query);
     }
 
-    public static Skill stringToSkill(String line) {
-        String[] elements = line.split(",");
-        return new Skill(Integer.parseInt(elements[0]), elements[1], Status.valueOf(elements[2]));
-    }
 
-    public Skill createSkill() {
-        System.out.print("Enter skill name: ");
-        Skill skill = new Skill(0, InputByUser.inputData(), Status.ACTIVE);
+    public Skill createSkill(Skill skill) {
         add(skill);
         return skill;
     }

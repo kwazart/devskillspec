@@ -6,12 +6,12 @@ import repository.SkillRepository;
 import java.util.List;
 
 
-public class SkillController implements Controller{
+public class SkillController implements Controller<Skill>{
     private SkillRepository skillRepository = new SkillRepository();
 
     @Override
-    public void create() {
-        skillRepository.createSkill();
+    public void create(Skill skill) {
+        skillRepository.createSkill(skill);
     }
 
     @Override
@@ -28,12 +28,12 @@ public class SkillController implements Controller{
     }
 
     @Override
-    public void update(int var) {
-        skillRepository.update(var);
+    public void update(Skill skill) {
+        skillRepository.update(skill);
     }
 
     @Override
-    public void delete() {
-        skillRepository.delete();
+    public void delete(Skill skill) {
+        skillRepository.delete(skill);
     }
 }

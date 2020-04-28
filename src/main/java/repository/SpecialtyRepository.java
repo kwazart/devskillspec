@@ -2,19 +2,20 @@ package repository;
 
 
 import connectionUtil.Connector;
-import connectionUtil.InputByUser;
 import model.Specialty;
 import model.Status;
+import repository.jdbc.JdbcRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class SpecialtyRepository implements Repository<Specialty> {
+public class SpecialtyRepository implements Repository<Specialty>, JdbcRepository {
     Logger log = Logger.getLogger(DeveloperRepository.class.getName());
 
     private static final String TABLE = "specialties";
 
-    public static String getTABLE() {
+    private static String getTABLE() {
         return TABLE;
     }
 
@@ -57,44 +58,29 @@ public class SpecialtyRepository implements Repository<Specialty> {
     }
 
     @Override
-    public void update(int variant) {
+    public void update(Specialty specialty) {
         logging("updater");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = null;
-        if (variant == 1) {
-            System.out.println("Updating procedure. New data.");
-            System.out.println("Enter new specialty name: ");
-            query =" UPDATE " + getTABLE() + " SET specialty_name = '" + InputByUser.inputData() + "' WHERE id = " + id + ";";
-        } else if (variant == 2) {
-            System.out.println("Updating procedure. New data.");
-            Specialty specialty = get(id);
-            if (specialty.getStatus().equals(Status.ACTIVE)) {
-                query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
-            } else {
-                query = " UPDATE " + getTABLE() + " SET status = 'ACTIVE' WHERE id = " + id + ";";
-            }
-        }
+
+
+        String query =" UPDATE " + getTABLE()
+                + " SET specialty_name = '" + specialty.getName()
+                + "' WHERE id = " + specialty.getId() + ";";
+
+        Connector.addOrUpdate(query);
+        query =" UPDATE " + getTABLE()
+                + " SET status = '" + specialty.getStatus().toString()
+                + "' WHERE id = " + specialty.getId() + ";";
         Connector.addOrUpdate(query);
     }
 
     @Override
-    public void delete() {
+    public void delete(Specialty specialty) {
         logging("delete");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
+        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + specialty.getId() + ";";
         Connector.addOrUpdate(query);
     }
 
-    public static Specialty stringToSpecialty(String line) {
-        String[] elements = line.split(",");
-        return new Specialty(Integer.parseInt(elements[0]), elements[1], Status.valueOf(elements[2]));
-    }
-
-    public Specialty createSpecialty() {
-        System.out.print("Enter specialty name: ");
-        Specialty specialty = new Specialty(0, InputByUser.inputData(), Status.ACTIVE);
+    public Specialty createSpecialty(Specialty specialty) {
         add(specialty);
         return specialty;
     }

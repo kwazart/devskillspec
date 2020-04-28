@@ -6,12 +6,12 @@ import repository.DeveloperRepository;
 import java.util.List;
 
 
-public class DeveloperController implements Controller {
+public class DeveloperController implements Controller<Developer> {
     private DeveloperRepository developerRepository = new DeveloperRepository();
 
     @Override
-    public void create() {
-        developerRepository.createDeveloper();
+    public void create(Developer developer)  {
+        developerRepository.createDeveloper(developer);
     }
 
     @Override
@@ -27,12 +27,12 @@ public class DeveloperController implements Controller {
     }
 
     @Override
-    public void update(int var) {
-        developerRepository.update(var);
+    public void update(Developer developer) {
+        developerRepository.update(developer);
     }
 
     @Override
-    public void delete() {
-        developerRepository.delete();
+    public void delete(Developer developer) {
+        developerRepository.delete(developer);
     }
 }

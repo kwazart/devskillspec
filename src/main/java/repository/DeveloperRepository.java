@@ -1,16 +1,16 @@
 package repository;
 
 import connectionUtil.Connector;
-import connectionUtil.InputByUser;
 import model.*;
+import repository.jdbc.JdbcRepository;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
-public class DeveloperRepository implements Repository<Developer> {
+public class DeveloperRepository implements Repository<Developer>, JdbcRepository {
     private static final String TABLE = "developers";
 
     public static String getTABLE() {
@@ -29,9 +29,6 @@ public class DeveloperRepository implements Repository<Developer> {
             e.printStackTrace();
         }
     }
-
-    SkillRepository skillRepository = new SkillRepository();
-    SpecialtyRepository specialtyRepository = new SpecialtyRepository();
 
     @Override
     public void add(Developer developer) {
@@ -97,107 +94,42 @@ public class DeveloperRepository implements Repository<Developer> {
     }
 
     @Override
-    public void update(int variant) {
+    public void update(Developer developer) {
         logging("updater");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = null;
-        Developer developer = get(id);
-        System.out.println("Updating procedure. New data.");
-        if (variant == 1) {
-            System.out.println("Enter new first name:");
-            query =" UPDATE " + getTABLE() + " SET firstName = '" + InputByUser.inputData() + "' WHERE id = " + id + ";";
-        } else if (variant == 2) {
-            System.out.println("Enter new last name:");
-            query =" UPDATE " + getTABLE() + " SET lastName = '" + InputByUser.inputData() + "' WHERE id = " + id + ";";
-        } else if (variant == 3) {
-            Specialty specialty = addSpecialty();
-            query =" UPDATE " + getTABLE() + " SET specialty = '" + specialty.getName() + "' WHERE id = " + id + ";";
-        } else if (variant == 4) {
-            query =" UPDATE " + getTABLE() + " SET skills = '" + developer.listSkillToString(changeSkillList(developer)) + "' WHERE id = " + id + ";";
-        } else if (variant == 5) {
-            if (developer.getStatus().equals(Status.ACTIVE)) {
-                query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
-            } else {
-                query = " UPDATE " + getTABLE() + " SET status = 'ACTIVE' WHERE id = " + id + ";";
-            }
-        }
+
+        String query = "UPDATE " + getTABLE()
+                + " SET firstName = '" + developer.getFirstName()
+                + "' WHERE id = +" + developer.getId() +  ";";
+        Connector.addOrUpdate(query);
+        query = "UPDATE " + getTABLE()
+                + " SET lastName = '" + developer.getLastName()
+                + "' WHERE id = +" + developer.getId() +  ";";
+        Connector.addOrUpdate(query);
+        query = "UPDATE " + getTABLE()
+                + " SET specialty = '" + developer.getSpecialty().getName()
+                + "' WHERE id = +" + developer.getId() +  ";";
+        Connector.addOrUpdate(query);
+        query = "UPDATE " + getTABLE()
+                + " SET skills = '" + developer.listSkillToString(developer.getSkills())
+                + "' WHERE id = +" + developer.getId() +  ";";
+        Connector.addOrUpdate(query);
+        query = "UPDATE " + getTABLE()
+                + " SET status = '" + developer.getStatus().toString()
+                + "' WHERE id = +" + developer.getId() +  ";";
         Connector.addOrUpdate(query);
     }
 
     @Override
-    public void delete() {
+    public void delete(Developer developer) {
         logging("delete");
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > searchMaxIndex()) return;
-        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + id + ";";
+        String query = " UPDATE " + getTABLE() + " SET status = 'DELETED' WHERE id = " + developer.getId() + ";";
         Connector.addOrUpdate(query);
     }
 
 
-    private List<Skill> changeSkillList(Developer developer) {
-        List<Skill> list = developer.getSkills();
-        System.out.println(list);
-        System.out.println("Current skill list:");
-        for (Skill skill : list) {
-            System.out.print(skill.getName() + " ");
-        }
-        String select = null;
-        while (true) {
-            System.out.print("Delete or Add element?\n\t[d] - delete\n\t[a] - add\n\t[e] - exit\nSelect variant: ");
-            select = new Scanner(System.in).nextLine();
-            if (select.equalsIgnoreCase("e")) break;
-            else if (select.equalsIgnoreCase("d")) {
-                System.out.print("Enter skill name for deleting: ");
-                String elementForDeleting = new Scanner(System.in).nextLine();
-                for (Skill skill : list) {
-                    if (skill.getName().equalsIgnoreCase(elementForDeleting)) {
-                        list.remove(skill);
-                        break;
-                    }
-                }
-            } else if (select.equalsIgnoreCase("a")) {
-                list.add(skillRepository.createSkill());
-            } else {
-                System.out.println("Wrong select. Try again.");
-            }
-        }
-        return list;
-    }
-
-
-    public Developer createDeveloper(){
-        System.out.print("Enter first name: ");
-        String firstName = InputByUser.inputData();
-        System.out.print("Enter last name: ");
-        String lastName = InputByUser.inputData();
-        Specialty specialty = addSpecialty();
-        List<Skill> listSkill = addSkill();
-        Developer developer = new Developer(0, firstName, lastName, specialty, listSkill, Status.ACTIVE);
+    public Developer createDeveloper(Developer developer){
         add(developer);
         return developer;
-    }
-
-    private List<Skill> addSkill() {
-        List<Skill> list = new ArrayList<>();
-        System.out.println("Adding skill: ");
-        while (true) {
-            System.out.println("\n\t[1] - Continue\n\t[0] - Exit");
-            String var = new Scanner(System.in).nextLine();
-            if (var.equals("0")) break;
-            else if(var.equals("1")) {
-                Skill skill = skillRepository.createSkill();
-                list.add(skill);
-            } else {
-                System.out.println("Error. Try again.");
-            }
-        }
-        return list;
-    }
-
-    private Specialty addSpecialty() {
-        Specialty specialty = specialtyRepository.createSpecialty();
-        return specialty;
     }
 
     public int searchMaxIndex() {

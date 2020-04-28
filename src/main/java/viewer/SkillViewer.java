@@ -1,7 +1,10 @@
 package viewer;
 
+import connectionUtil.InputByUser;
 import controller.SkillController;
 import model.Skill;
+import model.Status;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,7 +15,8 @@ public class SkillViewer implements Viewer<Skill> {
 
     @Override
     public void veiwAdd() {
-        skillController.create();
+        System.out.print("Enter skill name: ");
+        skillController.create(new Skill(0, InputByUser.inputData(), Status.ACTIVE));
     }
 
     @Override
@@ -25,13 +29,25 @@ public class SkillViewer implements Viewer<Skill> {
         printAll(skillController.readAll());
     }
 
+    public SkillController getSkillController() {
+        return skillController;
+    }
+
     @Override
     public void viewDelete() {
-        skillController.delete();
+        Skill skill = skillController.read();
+        if (skill.getStatus().equals(Status.DELETED)) {
+            System.out.println("Skill is deleted.");
+            return;
+        }
+        skill.setStatus(Status.DELETED);
+        skillController.delete(skill);
     }
 
     @Override
     public void viewUpdate() {
+        Skill skill = skillController.read();
+
         System.out.println("What do you need to change?");
         String variant;
         while (true) {
@@ -42,10 +58,22 @@ public class SkillViewer implements Viewer<Skill> {
             Scanner sc = new Scanner(System.in);
             variant = sc.nextLine();
             if (variant.equals("0")) { return; }
-            if (variant.equals("1")) { skillController.update(1);}
-            else if (variant.equals("2")) { skillController.update(2);}
+            if (variant.equals("1")) {
+                System.out.print("Enter new skill name: ");
+                skill.setName(InputByUser.inputData());
+                break;
+            }
+            else if (variant.equals("2")) {
+                if (skill.getStatus().equals(Status.ACTIVE)) {
+                    skill.setStatus(Status.DELETED);
+                } else  {
+                    skill.setStatus(Status.ACTIVE);
+                }
+                break;
+            }
             else { System.out.println("\nWrong choice. Try again.\n"); }
         }
+        skillController.update(skill);
     }
 
     @Override

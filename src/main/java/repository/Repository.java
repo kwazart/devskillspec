@@ -14,24 +14,10 @@ public interface Repository<E> {
 
     List<E> getAll();
 
-    void update(int x);
+    void update(E e);
 
-    void delete();
+    void delete(E e);
 
-    default void printByIndex(E e) {
-        System.out.println(e);
-    }
-
-    default void printAll(List<E> list) {
-        for (E e : list) {
-            System.out.println(e);
-        }
-        System.out.println("\n");
-    }
-
-    default void notFound() {
-        System.out.println("Object doesn't found");
-    }
 
     default void logging(String str) {
         Date date = new Date();

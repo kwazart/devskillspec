@@ -10,7 +10,6 @@ public class MainMenu {
         DeveloperViewer viewerDeveloper = new DeveloperViewer();
 
         String select;
-        int x;
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Main menu:");

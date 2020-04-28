@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface Controller<E> {
 
-    void create();
+    void create(E e);
 
     E read();
 
     List<E> readAll();
 
-    void update(int x);
+    void update(E e);
 
-    void delete();
+    void delete(E e);
 }
