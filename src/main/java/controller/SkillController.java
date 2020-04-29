@@ -1,39 +1,39 @@
 package controller;
 
-import connectionUtil.InputByUser;
+import connectionutil.InputByUserUtil;
 import model.Skill;
-import repository.SkillRepository;
+import repository.jdbc.SkillRepositoryImpl;
 import java.util.List;
 
 
 public class SkillController implements Controller<Skill>{
-    private SkillRepository skillRepository = new SkillRepository();
+    private SkillRepositoryImpl skillRepositoryImpl = new SkillRepositoryImpl();
 
     @Override
-    public void create(Skill skill) {
-        skillRepository.createSkill(skill);
+    public Skill create(Skill skill) {
+        return skillRepositoryImpl.save(skill);
     }
 
     @Override
     public Skill read() {
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > skillRepository.searchMaxIndex()) return null;
-        return skillRepository.get(id);
+        int id = InputByUserUtil.inputInt();
+        if (id <= 0 || id > skillRepositoryImpl.searchMaxIndex()) return null;
+        return skillRepositoryImpl.getById(id);
 
     }
 
     @Override
     public List<Skill> readAll() {
-        return skillRepository.getAll();
+        return skillRepositoryImpl.getAll();
     }
 
     @Override
-    public void update(Skill skill) {
-        skillRepository.update(skill);
+    public Skill update(Skill skill) {
+        return skillRepositoryImpl.update(skill);
     }
 
     @Override
-    public void delete(Skill skill) {
-        skillRepository.delete(skill);
+    public Skill delete(Skill skill) {
+        return skillRepositoryImpl.delete(skill);
     }
 }

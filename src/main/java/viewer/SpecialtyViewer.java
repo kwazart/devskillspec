@@ -1,6 +1,6 @@
 package viewer;
 
-import connectionUtil.InputByUser;
+import connectionutil.InputByUserUtil;
 import controller.SpecialtyController;
 import model.Specialty;
 import model.Status;
@@ -14,7 +14,7 @@ public class SpecialtyViewer implements Viewer<Specialty> {
     @Override
     public void veiwAdd() {
         System.out.print("Enter specialty name: ");
-        specialtyController.create(new Specialty(0, InputByUser.inputData(), Status.ACTIVE));
+        specialtyController.create(new Specialty(0, InputByUserUtil.inputData(), Status.ACTIVE));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class SpecialtyViewer implements Viewer<Specialty> {
             if (variant.equals("0")) { return; }
             if (variant.equals("1")) {
                 System.out.print("Enter new specialty name: ");
-                specialty.setName(InputByUser.inputData());
+                specialty.setName(InputByUserUtil.inputData());
                 break;
             }
             else if (variant.equals("2")) {
@@ -84,5 +84,13 @@ public class SpecialtyViewer implements Viewer<Specialty> {
         for (Specialty specialty : list) {
             printByIndex(specialty);
         }
+    }
+
+    public List<Specialty> printCurrentListSpecialties() {
+        List<Specialty> list = specialtyController.readAll();
+        for (Specialty specialty : list) {
+            printByIndex(specialty);
+        }
+        return list;
     }
 }

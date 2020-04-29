@@ -1,8 +1,8 @@
-package connectionUtil;
+package connectionutil;
 
 import java.util.Scanner;
 
-public class InputByUser {
+public class InputByUserUtil {
     public static String inputData() {
         return new Scanner(System.in).nextLine();
     }

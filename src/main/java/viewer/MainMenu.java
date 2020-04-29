@@ -1,6 +1,6 @@
 package viewer;
 
-import connectionUtil.Connector;
+import connectionutil.ConnectorUtil;
 import java.util.Scanner;
 
 public class MainMenu {
@@ -20,17 +20,14 @@ public class MainMenu {
             System.out.println("Select variant:");
             select = scanner.nextLine();
             if (select.equals("0")) {
-                Connector.closeConnection(Connector.getConnection());
+                ConnectorUtil.closeConnection(ConnectorUtil.getConnection());
                 return;
             }
             if ("1".equals(select)) {
-                Connector.startConnection();
                 viewerDeveloper.viewInnerMenu();
             } else if ("2".equals(select)) {
-                Connector.startConnection();
                 viewerSkill.viewInnerMenu();
             } else if ("3".equals(select)) {
-                Connector.startConnection();
                 viewerSpecialty.viewInnerMenu();
             } else {
                 System.out.println("Wrong variant. Try again.\n\n");

@@ -1,4 +1,4 @@
-package connectionUtil;
+package connectionutil;
 
 public class ValidationUtil {
     public static boolean isDigit (String s) {

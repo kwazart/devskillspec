@@ -1,6 +1,6 @@
 package viewer;
 
-import connectionUtil.InputByUser;
+import connectionutil.InputByUserUtil;
 import controller.SkillController;
 import model.Skill;
 import model.Status;
@@ -16,7 +16,7 @@ public class SkillViewer implements Viewer<Skill> {
     @Override
     public void veiwAdd() {
         System.out.print("Enter skill name: ");
-        skillController.create(new Skill(0, InputByUser.inputData(), Status.ACTIVE));
+        skillController.create(new Skill(0, InputByUserUtil.inputData(), Status.ACTIVE));
     }
 
     @Override
@@ -60,7 +60,7 @@ public class SkillViewer implements Viewer<Skill> {
             if (variant.equals("0")) { return; }
             if (variant.equals("1")) {
                 System.out.print("Enter new skill name: ");
-                skill.setName(InputByUser.inputData());
+                skill.setName(InputByUserUtil.inputData());
                 break;
             }
             else if (variant.equals("2")) {
@@ -86,5 +86,13 @@ public class SkillViewer implements Viewer<Skill> {
         for (Skill skill : list) {
             printByIndex(skill);
         }
+    }
+
+    public List<Skill> printCurrentListSkills() {
+        List<Skill> list = skillController.readAll();
+        for (Skill skill : list) {
+            printByIndex(skill);
+        }
+        return list;
     }
 }

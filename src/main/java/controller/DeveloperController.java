@@ -1,38 +1,39 @@
 package controller;
 
-import connectionUtil.InputByUser;
+import connectionutil.InputByUserUtil;
 import model.Developer;
-import repository.DeveloperRepository;
+import repository.jdbc.DeveloperRepositoryImpl;
+
 import java.util.List;
 
 
 public class DeveloperController implements Controller<Developer> {
-    private DeveloperRepository developerRepository = new DeveloperRepository();
+    private DeveloperRepositoryImpl developerRepositoryImpl = new DeveloperRepositoryImpl();
 
     @Override
-    public void create(Developer developer)  {
-        developerRepository.createDeveloper(developer);
+    public Developer create(Developer developer)  {
+        return developerRepositoryImpl.save(developer);
     }
 
     @Override
     public Developer read() {
-        int id = InputByUser.inputInt();
-        if (id <= 0 || id > developerRepository.searchMaxIndex()) return null;
-        return developerRepository.get(id);
+        int id = InputByUserUtil.inputInt();
+        if (id <= 0 || id > developerRepositoryImpl.searchMaxIndex()) return null;
+        return developerRepositoryImpl.getById(id);
     }
 
     @Override
     public List<Developer> readAll() {
-        return developerRepository.getAll();
+        return developerRepositoryImpl.getAll();
     }
 
     @Override
-    public void update(Developer developer) {
-        developerRepository.update(developer);
+    public Developer update(Developer developer) {
+        return developerRepositoryImpl.update(developer);
     }
 
     @Override
-    public void delete(Developer developer) {
-        developerRepository.delete(developer);
+    public Developer delete(Developer developer) {
+        return developerRepositoryImpl.delete(developer);
     }
 }

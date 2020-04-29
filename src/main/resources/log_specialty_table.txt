@@ -1,0 +1,2 @@
+апр. 29, 2020 3:34:14 PM repository.jdbc.SpecialtyRepositoryImpl logging
+INFO: Wed Apr 29 15:34:14 MSK 2020 repository.jdbc.SpecialtyRepositoryImpl called add specialty to table-skills() method
